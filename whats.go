@@ -60,7 +60,7 @@ func stringify(argv []string) string {
 	return query
 }
 
-/* fills the struct with first result */
+/* parses json-string and fills the struct */
 func parse_json(str []byte, json_ptr *google.GoogleApiDataType) {
 	err := json.Unmarshal(str, json_ptr)
 	if err != nil {
