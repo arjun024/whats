@@ -1,0 +1,34 @@
+whats
+---------
+
+whats is a tool to quickly look up something from the command line,
+written in Go.
+
+
+How to build
+------------
+
+$ make
+
+move whats to any location in your $PATH. eg: /usr/local/bin
+
+
+How to run
+----------
+
+$ whats <something>
+
+example:
+
+$ whats love
+
+Love is a variety of different feelings, states, and attitudes that ranges from 
+interpersonal affection ("I love my mother") to pleasure ("I loved that meal").
+It can refer ...
+
+
+How does whats work
+-------------------
+
+It's a client that uses a deprecated google search api. Then it make a naive
+guess out of the results which one to choose, and displays the result
