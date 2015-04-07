@@ -30,5 +30,5 @@ It can refer ...
 How does whats work
 -------------------
 
-It's a client that uses a deprecated google search api. Then it make a naive
+It's a client that uses a google search api. Then it make a naive
 guess out of the results which one to choose, and displays the result
