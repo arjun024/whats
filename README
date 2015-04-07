@@ -10,7 +10,7 @@ How to build
 
 $ make
 
-move whats to any location in your $PATH. eg: /usr/local/bin
+$ sudo make install
 
 
 How to run
@@ -22,7 +22,7 @@ example:
 
 $ whats love
 
-Love is a variety of different feelings, states, and attitudes that ranges from 
+Love is a variety of different feelings, states, and attitudes that ranges from
 interpersonal affection ("I love my mother") to pleasure ("I loved that meal").
 It can refer ...
 
@@ -31,4 +31,16 @@ How does whats work
 -------------------
 
 It's a client that uses a google search api. Then it make a naive
-guess out of the results which one to choose, and displays the result
+guess out of the results which one to choose, and displays the result.
+
+
+Clean up
+--------
+
+$ make clean
+
+
+Uninstall
+--------
+
+$ sudo make uninstall
