@@ -36,15 +36,15 @@ import(
 	"./whatslib/google"
 )
 
-const AUTHOR = "Arjun Sreedharan <arjun024@gmail.com>"
-const VERSION = "0.0.1"
+const (
+	AUTHOR  = "Arjun Sreedharan <arjun024@gmail.com>"
+	VERSION = "0.0.1"
 
-const DEBUG = false
-const REFERER = "http://arjunsreedharan.org"
-const GOOGLE_URI = "https://ajax.googleapis.com" +
-			"/ajax/services/search/web?v=1.0&q="
-
-
+	DEBUG      = false
+	REFERER    = "http://arjunsreedharan.org"
+	GOOGLE_URI = "https://ajax.googleapis.com" +
+		"/ajax/services/search/web?v=1.0&q="
+)
 
 func usage() {
 	fmt.Printf("%s\n%s%s\n%s%s\n",
