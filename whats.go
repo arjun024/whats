@@ -27,6 +27,7 @@ package main
 import(
 	"os"
 	"fmt"
+	"html"
 	"net/http"
 	"net/url"
 	"encoding/json"
@@ -55,27 +56,7 @@ func usage() {
 
 func strip_html(str string) string {
 	regexp_html := regexp.MustCompile("<[^>]*>")
-	str = regexp_html.ReplaceAllString(str, "")
-
-	replacements := map[string]string {
-		"&#8216;" : "'",
-		"&#8217;" : "'",
-		"&#8220;" : "\"",
-		"&#8221;" : "\"",
-		"&nbsp;" : " ",
-		"&quot;" : "\"",
-		"&apos;" : "'",
-		"&#34;" : "\"",
-		"&#39;" : "'",
-		"&amp; " : "& ",
-		"&amp;amp; " : "& ",
-	}
-
-	for k,v := range replacements {
-		str = strings.Replace(str, k, v, -1)
-	}
-
-	return str
+	return html.UnescapeString(regexp_html.ReplaceAllString(str, ""))
 }
 
 /* From the top 4 results, let me guess which's best */
