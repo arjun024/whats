@@ -27,34 +27,34 @@
 package google
 
 type GoogleApiDataType struct {
-	ResponseData ResponseDataType
+	ResponseData    ResponseDataType
 	ResponseDetails string
-	ResponseStatus int
+	ResponseStatus  int
 }
 
 type ResponseDataType struct {
 	Results []ResultsType
-	Cursor CursorType
+	Cursor  CursorType
 }
 
 type ResultsType struct {
 	GsearchResultClass string
-	UnescapedUrl string
-	Url string
-	VisibleUrl string
-	CacheUrl string
-	Title string
-	TitleNoFormatting string
-	Content string
+	UnescapedUrl       string
+	Url                string
+	VisibleUrl         string
+	CacheUrl           string
+	Title              string
+	TitleNoFormatting  string
+	Content            string
 }
 
 type CursorType struct {
-	ResultCount string
-	Pages []PagesType
+	ResultCount          string
+	Pages                []PagesType
 	EstimatedResultCount string
-	CurrentPageIndex int
-	MoreResultsUrl string
-	SearchResultTime string
+	CurrentPageIndex     int
+	MoreResultsUrl       string
+	SearchResultTime     string
 }
 
 type PagesType struct {

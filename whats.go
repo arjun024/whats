@@ -24,88 +24,45 @@
 
 package main
 
-import(
-	"os"
-	"fmt"
-	"net/http"
-	"io/ioutil"
+import (
 	"encoding/json"
-	"strings"
+	"fmt"
+	"html"
+	"net/http"
+	"net/url"
+	"os"
 	"regexp"
-	"./whatslib/google"
+	"strings"
+
+	"github.com/arjun024/whats/whatslib/google"
 )
 
-const AUTHOR = "Arjun Sreedharan <arjun024@gmail.com>"
-const VERSION = "0.0.1"
+const (
+	AUTHOR  = "Arjun Sreedharan <arjun024@gmail.com>"
+	VERSION = "0.0.1"
 
-const DEBUG = false
-const SPACE_URL_ENCODED = "%20"
-const REFERER = "http://arjunsreedharan.org"
-const GOOGLE_URI = "https://ajax.googleapis.com" +
-			"/ajax/services/search/web?v=1.0&q="
-
-
-
-func stringify(argv []string) string {
-	query := ""
-	i := 1
-	size := len(argv)
-	for i < size {
-		query += os.Args[i]
-		i++
-		if i < size {
-			query += SPACE_URL_ENCODED
-		}
-	}
-	return query
-}
-
-/* parses json-string and fills the struct */
-func parse_json(str []byte, json_ptr *google.GoogleApiDataType) {
-	err := json.Unmarshal(str, json_ptr)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to parse json: %s\n",
-			err.Error())
-		os.Exit(1)
-	}
-}
+	DEBUG      = false
+	REFERER    = "http://arjunsreedharan.org"
+	GOOGLE_URI = "https://ajax.googleapis.com" +
+		"/ajax/services/search/web?v=1.0&q="
+)
 
 func usage() {
 	fmt.Printf("%s\n%s%s\n%s%s\n",
 		"SYNTAX : whats <SOMETHING>",
 		"AUTHOR : ", AUTHOR,
 		"VERSION: ", VERSION)
-		os.Exit(0)
+	os.Exit(0)
 }
 
 func strip_html(str string) string {
 	regexp_html := regexp.MustCompile("<[^>]*>")
-	str = regexp_html.ReplaceAllString(str, "")
-
-	replacements := map[string]string {
-		"&#8216;" : "'",
-		"&#8217;" : "'",
-		"&#8220;" : "\"",
-		"&#8221;" : "\"",
-		"&nbsp;" : " ",
-		"&quot;" : "\"",
-		"&apos;" : "'",
-		"&#34;" : "\"",
-		"&#39;" : "'",
-		"&amp; " : "& ",
-		"&amp;amp; " : "& ",
-	}
-
-	for k,v := range replacements {
-		str = strings.Replace(str, k, v, -1)
-	}
-
-	return str
+	return html.UnescapeString(regexp_html.ReplaceAllString(str, ""))
 }
 
 /* From the top 4 results, let me guess which's best */
 func guess(r []google.ResultsType) int {
-	cues := []string {
+	cues := []string{
 		" is a ",
 		" are a ",
 		" was as ",
@@ -113,15 +70,15 @@ func guess(r []google.ResultsType) int {
 		" defined as ",
 		" developed as a ",
 	}
-	for i, result:= range r {
+	for i, result := range r {
 		if strings.Contains(result.VisibleUrl, "wikipedia.org") {
-			return i%3
+			return i % 3
 		}
 	}
-	for i, result:= range r {
+	for i, result := range r {
 		for _, cue := range cues {
 			if strings.Contains(result.Content, cue) {
-				return i%3
+				return i % 3
 			}
 		}
 	}
@@ -137,10 +94,11 @@ func output(g *google.GoogleApiDataType) {
 func main() {
 	var query string
 	var gdata google.GoogleApiDataType
-	query = GOOGLE_URI + stringify(os.Args)
-	if query == GOOGLE_URI {
+
+	if len(os.Args) == 1 {
 		usage()
 	}
+	query = GOOGLE_URI + url.QueryEscape(strings.Join(os.Args[1:], " "))
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", query, nil)
@@ -155,13 +113,12 @@ func main() {
 
 	defer resp.Body.Close()
 
-	contents, err := ioutil.ReadAll(resp.Body)
+	err = json.NewDecoder(resp.Body).Decode(&gdata)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error in reading HTTP response: %s\n",
+		fmt.Fprintf(os.Stderr, "Unable to parse json: %s\n",
 			err.Error())
 		os.Exit(1)
 	}
 
-	parse_json(contents, &gdata)
-	output(&gdata);
+	output(&gdata)
 }
