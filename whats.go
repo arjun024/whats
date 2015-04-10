@@ -24,15 +24,15 @@
 
 package main
 
-import(
-	"os"
-	"fmt"
-	"net/http"
-	"io/ioutil"
-	"encoding/json"
-	"strings"
-	"regexp"
+import (
 	"./whatslib/google"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"regexp"
+	"strings"
 )
 
 const AUTHOR = "Arjun Sreedharan <arjun024@gmail.com>"
@@ -42,9 +42,7 @@ const DEBUG = false
 const SPACE_URL_ENCODED = "%20"
 const REFERER = "http://arjunsreedharan.org"
 const GOOGLE_URI = "https://ajax.googleapis.com" +
-			"/ajax/services/search/web?v=1.0&q="
-
-
+	"/ajax/services/search/web?v=1.0&q="
 
 func stringify(argv []string) string {
 	query := ""
@@ -75,28 +73,28 @@ func usage() {
 		"SYNTAX : whats <SOMETHING>",
 		"AUTHOR : ", AUTHOR,
 		"VERSION: ", VERSION)
-		os.Exit(0)
+	os.Exit(0)
 }
 
 func strip_html(str string) string {
 	regexp_html := regexp.MustCompile("<[^>]*>")
 	str = regexp_html.ReplaceAllString(str, "")
 
-	replacements := map[string]string {
-		"&#8216;" : "'",
-		"&#8217;" : "'",
-		"&#8220;" : "\"",
-		"&#8221;" : "\"",
-		"&nbsp;" : " ",
-		"&quot;" : "\"",
-		"&apos;" : "'",
-		"&#34;" : "\"",
-		"&#39;" : "'",
-		"&amp; " : "& ",
-		"&amp;amp; " : "& ",
+	replacements := map[string]string{
+		"&#8216;":    "'",
+		"&#8217;":    "'",
+		"&#8220;":    "\"",
+		"&#8221;":    "\"",
+		"&nbsp;":     " ",
+		"&quot;":     "\"",
+		"&apos;":     "'",
+		"&#34;":      "\"",
+		"&#39;":      "'",
+		"&amp; ":     "& ",
+		"&amp;amp; ": "& ",
 	}
 
-	for k,v := range replacements {
+	for k, v := range replacements {
 		str = strings.Replace(str, k, v, -1)
 	}
 
@@ -105,7 +103,7 @@ func strip_html(str string) string {
 
 /* From the top 4 results, let me guess which's best */
 func guess(r []google.ResultsType) int {
-	cues := []string {
+	cues := []string{
 		" is a ",
 		" are a ",
 		" was as ",
@@ -113,15 +111,15 @@ func guess(r []google.ResultsType) int {
 		" defined as ",
 		" developed as a ",
 	}
-	for i, result:= range r {
+	for i, result := range r {
 		if strings.Contains(result.VisibleUrl, "wikipedia.org") {
-			return i%3
+			return i % 3
 		}
 	}
-	for i, result:= range r {
+	for i, result := range r {
 		for _, cue := range cues {
 			if strings.Contains(result.Content, cue) {
-				return i%3
+				return i % 3
 			}
 		}
 	}
@@ -163,5 +161,5 @@ func main() {
 	}
 
 	parse_json(contents, &gdata)
-	output(&gdata);
+	output(&gdata)
 }
