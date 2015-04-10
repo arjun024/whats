@@ -25,7 +25,6 @@
 package main
 
 import (
-	"./whatslib/google"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -33,6 +32,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/arjun024/whats/whatslib/google"
 )
 
 const AUTHOR = "Arjun Sreedharan <arjun024@gmail.com>"
