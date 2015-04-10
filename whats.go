@@ -28,6 +28,7 @@ import(
 	"os"
 	"fmt"
 	"net/http"
+	"net/url"
 	"io/ioutil"
 	"encoding/json"
 	"strings"
@@ -45,20 +46,6 @@ const GOOGLE_URI = "https://ajax.googleapis.com" +
 			"/ajax/services/search/web?v=1.0&q="
 
 
-
-func stringify(argv []string) string {
-	query := ""
-	i := 1
-	size := len(argv)
-	for i < size {
-		query += os.Args[i]
-		i++
-		if i < size {
-			query += SPACE_URL_ENCODED
-		}
-	}
-	return query
-}
 
 /* parses json-string and fills the struct */
 func parse_json(str []byte, json_ptr *google.GoogleApiDataType) {
@@ -137,7 +124,7 @@ func output(g *google.GoogleApiDataType) {
 func main() {
 	var query string
 	var gdata google.GoogleApiDataType
-	query = GOOGLE_URI + stringify(os.Args)
+	query = GOOGLE_URI + url.QueryEscape(strings.Join(os.Args[1:], " "))
 	if query == GOOGLE_URI {
 		usage()
 	}
