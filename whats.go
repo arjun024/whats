@@ -29,7 +29,6 @@ import(
 	"fmt"
 	"net/http"
 	"net/url"
-	"io/ioutil"
 	"encoding/json"
 	"strings"
 	"regexp"
@@ -46,16 +45,6 @@ const GOOGLE_URI = "https://ajax.googleapis.com" +
 			"/ajax/services/search/web?v=1.0&q="
 
 
-
-/* parses json-string and fills the struct */
-func parse_json(str []byte, json_ptr *google.GoogleApiDataType) {
-	err := json.Unmarshal(str, json_ptr)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to parse json: %s\n",
-			err.Error())
-		os.Exit(1)
-	}
-}
 
 func usage() {
 	fmt.Printf("%s\n%s%s\n%s%s\n",
@@ -142,13 +131,12 @@ func main() {
 
 	defer resp.Body.Close()
 
-	contents, err := ioutil.ReadAll(resp.Body)
+	err = json.NewDecoder(resp.Body).Decode(&gdata)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error in reading HTTP response: %s\n",
+		fmt.Fprintf(os.Stderr, "Unable to parse json: %s\n",
 			err.Error())
 		os.Exit(1)
 	}
 
-	parse_json(contents, &gdata)
 	output(&gdata);
 }
