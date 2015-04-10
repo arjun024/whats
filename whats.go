@@ -93,10 +93,11 @@ func output(g *google.GoogleApiDataType) {
 func main() {
 	var query string
 	var gdata google.GoogleApiDataType
-	query = GOOGLE_URI + url.QueryEscape(strings.Join(os.Args[1:], " "))
-	if query == GOOGLE_URI {
+
+	if len(os.Args) == 1 {
 		usage()
 	}
+	query = GOOGLE_URI + url.QueryEscape(strings.Join(os.Args[1:], " "))
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", query, nil)
